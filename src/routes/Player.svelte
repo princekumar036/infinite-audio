@@ -1,5 +1,4 @@
 <script lang="ts">
-    import Plyr from "plyr";
     import "plyr/dist/plyr.css";
     import { onMount } from "svelte";
     import { icons } from "$lib/icons";
@@ -22,9 +21,12 @@
     export const loading = () => plyr__control.innerHTML = `<span class="text-2xl">${icons.loading}</span>`
 
     onMount(() => {
-        plyrRef = new Plyr(audioRef, {
-            controls: ["play", "progress", "mute", "volume"],
-        });
+        if (typeof window !== 'undefined') {
+            const Plyr = (import('plyr')).default;
+            plyrRef = new Plyr(audioRef, {
+                controls: ["play", "progress", "mute", "volume"],
+            });
+        }
 
         plyr__control = document.querySelector('.plyr__control')
 
